@@ -3,26 +3,27 @@ const bcrypt = require('bcryptjs');
 const { isEmail } = require('../utils/validate');
 const NotFoundErr = require('../errors/NotFoundErr');
 const { reqErrors, validationErrors } = require('../utils/errorMessages');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const userSchema = new Schema({
   email: {
     type: String,
     required: true,
     validate: [isEmail, validationErrors.email.EMAIL_MESSAGE],
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
     required: true,
-    select: false
+    select: false,
   },
   name: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
-  }
+    maxlength: 30,
+  },
 });
 
 userSchema.statics.findUserByCredentials = function findUser(email, password) {
