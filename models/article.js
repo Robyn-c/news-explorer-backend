@@ -3,48 +3,49 @@ const { isUrl } = require('../utils/validate');
 const NotFoundErr = require('../errors/NotFoundErr');
 const ForbiddenErr = require('../errors/ForbiddenErr');
 const { reqErrors, validationErrors } = require('../utils/errorMessages');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const articleSchema = new Schema({
   keyword: {
     type: String,
-    required: true
+    required: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   text: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: String,
-    required: true
+    required: true,
   },
   source: {
     type: String,
-    required: true
+    required: true,
   },
   link: {
     type: String,
     required: true,
-    validate: [isUrl, validationErrors.url.LINK_MESSAGE]
+    validate: [isUrl, validationErrors.url.LINK_MESSAGE],
   },
   image: {
     type: String,
     required: true,
-    validate: [isUrl, validationErrors.url.IMAGE_MESSAGE]
+    validate: [isUrl, validationErrors.url.IMAGE_MESSAGE],
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
-    select: false
-  }
+    select: false,
+  },
 });
 
-articleSchema.statics.ownerArticleDeletion = function del(articleId, ownerId) {
+articleSchema.statics.ownerArticleDeletion = async function del(articleId, ownerId) {
   return this.findById(articleId)
     .select('+owner')
     .then((article) => {
@@ -54,7 +55,7 @@ articleSchema.statics.ownerArticleDeletion = function del(articleId, ownerId) {
       if (article.owner.toString() !== ownerId) {
         throw new ForbiddenErr(reqErrors.forbidden.ARTICLE_MESSAGE);
       }
-      return article.remove();
+      return this.deleteOne({ _id: articleId });
     })
     .catch();
 };
