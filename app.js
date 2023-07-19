@@ -40,7 +40,8 @@ app.use(errorHandler);
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DB_LINK);
+    await mongoose.connect('mongodb://mongo:7EQz2lCXSEowecEoVhL4@containers-us-west-22.railway.app:5879'
+);
   } catch (error) {
     console.log('Failed to connect to MongoDB', error);
   }
