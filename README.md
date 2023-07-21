@@ -1,4 +1,4 @@
-# news-explorer-backend
+# NewsExplorer Backend
 Este es un servicio que te permite encontrar noticias y guardarlas en tu cuenta.
 
 ## Como usar
